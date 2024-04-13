@@ -34,14 +34,21 @@ public class Link {
     private String originalLink;
 
     @Column(name = "created_at", nullable = false)
-    @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "valid_to", nullable = false)
-    @Builder.Default
     private LocalDateTime validTo = LocalDateTime.now().plusDays(3);
 
     @Column(name = "counter", nullable = false)
-    @Builder.Default
     private int counter = 0;
+    ////////////////////////////////////
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
+
+    @PreUpdate
+    protected void onUpdate() {
+        if (LocalDateTime.now().isAfter(validTo)) {
+            this.isDeleted = true;
+        }
+    }
 }
