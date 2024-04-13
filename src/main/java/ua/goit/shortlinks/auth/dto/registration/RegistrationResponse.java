@@ -8,11 +8,12 @@ import lombok.Data;
 public class RegistrationResponse {
     private Error error;
 
+
     public enum Error {
         ok,
         userAlreadyExists,
         invalidEmail,
-        invalidPassword,
+       invalidPassword,
 
     }
 
