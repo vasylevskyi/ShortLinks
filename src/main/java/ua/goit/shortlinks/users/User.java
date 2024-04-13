@@ -1,6 +1,6 @@
 package ua.goit.shortlinks.users;
 
-import ua.goit.shortlinks.notes.Note;
+import ua.goit.shortlinks.links.Note;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

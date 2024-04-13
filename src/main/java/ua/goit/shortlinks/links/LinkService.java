@@ -1,12 +1,12 @@
-package ua.goit.shortlinks.notes;
+package ua.goit.shortlinks.links;
 
-import ua.goit.shortlinks.notes.dto.create.CreateLinkRequest;
-import ua.goit.shortlinks.notes.dto.create.CreateLinkResponse;
+import ua.goit.shortlinks.links.dto.create.CreateLinkRequest;
+import ua.goit.shortlinks.links.dto.create.CreateLinkResponse;
 
-import ua.goit.shortlinks.notes.dto.delete.DeleteLinkResponse;
-import ua.goit.shortlinks.notes.dto.get.GetUserLinksResponse;
-import ua.goit.shortlinks.notes.dto.update.UpdateLinkRequest;
-import ua.goit.shortlinks.notes.dto.update.UpdateLinkResponse;
+import ua.goit.shortlinks.links.dto.delete.DeleteLinkResponse;
+import ua.goit.shortlinks.links.dto.get.GetUserLinksResponse;
+import ua.goit.shortlinks.links.dto.update.UpdateLinkRequest;
+import ua.goit.shortlinks.links.dto.update.UpdateLinkResponse;
 import ua.goit.shortlinks.users.UserService;
 
 import ua.goit.shortlinks.users.User;

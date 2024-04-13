@@ -1,6 +1,6 @@
-package ua.goit.shortlinks.notes.dto.get;
+package ua.goit.shortlinks.links.dto.get;
 
-import ua.goit.shortlinks.notes.Link;
+import ua.goit.shortlinks.links.Link;
 import lombok.Builder;
 import lombok.Data;
 

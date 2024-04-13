@@ -1,4 +1,4 @@
-package ua.goit.shortlinks.notes;
+package ua.goit.shortlinks.links;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import ua.goit.shortlinks.users.User;

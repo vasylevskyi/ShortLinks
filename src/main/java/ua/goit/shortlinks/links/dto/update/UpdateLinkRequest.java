@@ -1,4 +1,4 @@
-package ua.goit.shortlinks.notes.dto.update;
+package ua.goit.shortlinks.links.dto.update;
 
 import lombok.Data;
 

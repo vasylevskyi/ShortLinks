@@ -1,4 +1,4 @@
-package ua.goit.shortlinks.notes;
+package ua.goit.shortlinks.links;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

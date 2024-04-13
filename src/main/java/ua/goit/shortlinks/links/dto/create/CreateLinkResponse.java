@@ -1,4 +1,4 @@
-package ua.goit.shortlinks.notes.dto.create;
+package ua.goit.shortlinks.links.dto.create;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package ua.goit.shortlinks.notes.dto.delete;
+package ua.goit.shortlinks.links.dto.delete;
 
 import lombok.Builder;
 import lombok.Data;
