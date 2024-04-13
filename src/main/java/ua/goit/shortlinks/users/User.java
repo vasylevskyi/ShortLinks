@@ -23,11 +23,11 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "age", nullable = false)
-    private int age;
+//    @Column(name = "name", nullable = false)
+//    private String name;
+//
+//    @Column(name = "age", nullable = false)
+//    private int age;
 
     @OneToMany(mappedBy = "user")
     List<Note> notes;
