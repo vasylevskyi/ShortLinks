@@ -20,8 +20,6 @@ import java.util.Optional;
 public class AuthService {
     private static final int MAX_USER_ID_LENGTH = 100;
     private static final int MAX_PASSWORD_LENGTH = 255;
-    private static final int MAX_NAME_LENGTH = 100;
-    private static final int MAX_AGE = 100;
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
@@ -43,8 +41,6 @@ public class AuthService {
         userService.saveUser(User.builder()
                 .userId(request.getEmail())
                 .passwordHash(passwordEncoder.encode(request.getPassword()))
-                .name(request.getName())
-                .age(request.getAge())
                 .build());
 
         return RegistrationResponse.success();
@@ -79,14 +75,6 @@ public class AuthService {
 
         if (Objects.isNull(request.getPassword()) || request.getPassword().length() > MAX_PASSWORD_LENGTH) {
             return Optional.of(RegistrationResponse.Error.invalidPassword);
-        }
-
-        if (Objects.isNull(request.getName()) || request.getName().length() > MAX_NAME_LENGTH) {
-            return Optional.of(RegistrationResponse.Error.invalidName);
-        }
-
-        if (Objects.isNull(request.getAge()) || request.getAge() > MAX_AGE) {
-            return Optional.of(RegistrationResponse.Error.invalidAge);
         }
 
         return Optional.empty();

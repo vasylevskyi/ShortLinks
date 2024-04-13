@@ -1,6 +1,7 @@
 package ua.goit.shortlinks.users;
 
-import ua.goit.shortlinks.notes.Note;
+import ua.goit.shortlinks.linkes.Link;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,12 +24,6 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
-//    @Column(name = "name", nullable = false)
-//    private String name;
-//
-//    @Column(name = "age", nullable = false)
-//    private int age;
-
-    @OneToMany(mappedBy = "user")
-    List<Note> notes;
+    @OneToMany(mappedBy = "link")
+    List<Link> links;
 }

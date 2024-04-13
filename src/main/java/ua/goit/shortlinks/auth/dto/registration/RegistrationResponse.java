@@ -13,8 +13,7 @@ public class RegistrationResponse {
         userAlreadyExists,
         invalidEmail,
         invalidPassword,
-        invalidName,
-        invalidAge
+
     }
 
     public static RegistrationResponse success() {
