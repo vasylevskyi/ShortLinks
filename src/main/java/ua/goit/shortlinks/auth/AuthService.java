@@ -69,11 +69,11 @@ public class AuthService {
     }
 
     private Optional<RegistrationResponse.Error> validateRegistrationFields(RegistrationRequest request) {
-        if (Objects.isNull(request.getEmail()) || request.getEmail().length() > MAX_USER_ID_LENGTH) {
+        if (request.getEmail().length() > MAX_USER_ID_LENGTH) {
             return Optional.of(RegistrationResponse.Error.invalidEmail);
         }
 
-        if (Objects.isNull(request.getPassword()) || request.getPassword().length() < 8) {
+        if (request.getPassword().length() < 8) {
             return Optional.of(RegistrationResponse.Error.invalidPassword);
         }
 

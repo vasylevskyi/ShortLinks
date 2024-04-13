@@ -13,7 +13,7 @@ public class RegistrationResponse {
         ok,
         userAlreadyExists,
         invalidEmail,
-       invalidPassword,
+        invalidPassword,
 
     }
 
