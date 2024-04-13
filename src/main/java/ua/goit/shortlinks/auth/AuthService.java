@@ -73,7 +73,7 @@ public class AuthService {
             return Optional.of(RegistrationResponse.Error.invalidEmail);
         }
 
-        if (Objects.isNull(request.getPassword()) || request.getPassword().length() > MAX_PASSWORD_LENGTH) {
+        if (Objects.isNull(request.getPassword()) || request.getPassword().length() < 8) {
             return Optional.of(RegistrationResponse.Error.invalidPassword);
         }
 
