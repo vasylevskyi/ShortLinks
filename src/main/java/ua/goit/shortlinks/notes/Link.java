@@ -39,11 +39,9 @@ public class Link {
 
     @Column(name = "valid_to", nullable = false)
     @Builder.Default
-    private LocalDateTime validTo = LocalDateTime.now().plusDays(3); // Дата истечения - 3 дня с момента создания
+    private LocalDateTime validTo = LocalDateTime.now().plusDays(3);
 
     @Column(name = "counter", nullable = false)
     @Builder.Default
-    private int counter = 0; // Счетчик переходов
-
-    // Геттеры и сеттеры, если нужны
+    private int counter = 0;
 }
