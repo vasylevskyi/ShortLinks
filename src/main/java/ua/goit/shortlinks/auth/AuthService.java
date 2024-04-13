@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -69,16 +70,19 @@ public class AuthService {
     }
 
     private Optional<RegistrationResponse.Error> validateRegistrationFields(RegistrationRequest request) {
-        if (request.getEmail().length() > MAX_USER_ID_LENGTH) {
+        if (Objects.isNull(request.getEmail()) || request.getEmail().length() > MAX_USER_ID_LENGTH) {
             return Optional.of(RegistrationResponse.Error.invalidEmail);
         }
-
-        if (request.getPassword().length() < 8) {
+        if (Objects.isNull(request.getPassword()) || request.getPassword().length() < 8) {
             return Optional.of(RegistrationResponse.Error.invalidPassword);
         }
-
+        String passwordPattern = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$";
+        if (!Pattern.matches(passwordPattern, request.getPassword())) {
+            return Optional.of(RegistrationResponse.Error.invalidPassword);
+        }
         return Optional.empty();
     }
+
 
     private Optional<LoginResponse.Error> validateLoginFields(LoginRequest request) {
         if (Objects.isNull(request.getEmail()) || request.getEmail().length() > MAX_USER_ID_LENGTH) {

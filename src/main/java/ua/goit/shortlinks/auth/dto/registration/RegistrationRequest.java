@@ -2,6 +2,7 @@ package ua.goit.shortlinks.auth.dto.registration;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 import lombok.Data;
@@ -14,7 +15,6 @@ public class RegistrationRequest {
      private String email;
 
      @NotBlank(message = "Password cannot be empty")
-     @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$", message = "The password must contain at least one number, one small and one large letter, and at least 8 characters")
      private String password;
 
 }
