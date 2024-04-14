@@ -23,11 +23,11 @@ public class Link {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @JsonIgnore
     private User user;
 
-    @Column(name = "short_link", nullable = false)
+    @Column(name = "short_link", nullable = false,unique = true)
     private String shortLink;
 
     @Column(name = "original_link", nullable = false)
@@ -37,7 +37,7 @@ public class Link {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "valid_to", nullable = false)
-    private LocalDateTime validTo = LocalDateTime.now().plusDays(3);
+    private LocalDateTime validTo = LocalDateTime.now().plusDays(20);
 
     @Column(name = "counter", nullable = false)
     private int counter = 0;

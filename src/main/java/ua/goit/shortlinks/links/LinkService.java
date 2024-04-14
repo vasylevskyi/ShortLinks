@@ -13,6 +13,7 @@ import ua.goit.shortlinks.users.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -20,12 +21,37 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class LinkService {
-    private static final int MAX_TITLE_LENGTH = 100;
-    private static final int MAX_CONTENT_LENGTH = 1000;
 
     private final UserService userService;
     private final LinkRepository repository;
 
+////////////////////////////////CHECK
+    private static final String ALLOWED_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String PREFIX = "http://localhost:8080/";
+
+    private String generateRandomString() {
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder(8);
+        for (int i = 0; i < 8; i++) {
+            int randomIndex = random.nextInt(ALLOWED_CHARACTERS.length());
+            char randomChar = ALLOWED_CHARACTERS.charAt(randomIndex);
+            sb.append(randomChar);
+        }
+        return sb.toString();
+    }
+    private String generateUniqueShortLink() {
+        String shortLink;
+        do {
+            shortLink = PREFIX + generateRandomString();
+        } while (repository.existsByShortLink(shortLink));
+        return shortLink;
+    }
+//@Repository
+//public interface LinkRepository extends JpaRepository<Link, Long> {
+//    boolean existsByShortLink(String shortLink);
+//}
+
+    ////////////////////////////CHECK
     public CreateLinkResponse create(String username, CreateLinkRequest request) {
         Optional<CreateLinkResponse.Error> validationError = validateCreateFields(request);
 
@@ -35,9 +61,11 @@ public class LinkService {
 
         User user = userService.findByUsername(username);
 
+        String shortLink = generateRandomString();
+
         Link createdLink = repository.save(Link.builder()
                 .user(user)
-                .shortLink(request.getShortLink())
+                .shortLink(shortLink)
                 .originalLink(request.getOriginalLink())
                 .build());
 
