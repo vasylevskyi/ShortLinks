@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class CreateLinkRequest  {
-    private String shortLink;
+//    private String shortLink;
     private String originalLink;
 }

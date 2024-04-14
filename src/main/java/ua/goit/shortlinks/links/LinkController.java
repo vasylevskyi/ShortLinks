@@ -19,7 +19,9 @@ public class LinkController {
 
     @PostMapping
     public CreateLinkResponse create(Principal principal, @RequestBody CreateLinkRequest request) {
-        return linkService.create(principal.getName(), request);
+        CreateLinkRequest requestWithoutShortLink = new CreateLinkRequest();
+        requestWithoutShortLink.setOriginalLink(request.getOriginalLink());
+        return linkService.create(principal.getName(), requestWithoutShortLink);
     }
 
     @GetMapping ("/getUserLinks")

@@ -24,11 +24,35 @@ public class LinkService {
 
     private final UserService userService;
     private final LinkRepository repository;
-
-////////////////////////////////CHECK
-    private static final String ALLOWED_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final String PREFIX = "http://localhost:8080/";
+    private static final String ALLOWED_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+
+    public CreateLinkResponse create(String username, CreateLinkRequest request) {
+        Optional<CreateLinkResponse.Error> validationError = validateCreateFields(request);
+
+        if (validationError.isPresent()) {
+            return CreateLinkResponse.failed(validationError.get());
+        }
+
+        User user = userService.findByUsername(username);
+        String shortLink = generateUniqueShortLink(PREFIX);
+
+        Link createdLink = repository.save(Link.builder()
+                .user(user)
+                .shortLink(shortLink)
+                .originalLink(request.getOriginalLink())
+                .build());
+
+        return CreateLinkResponse.success(createdLink.getId());
+    }
+    private String generateUniqueShortLink(String prefix) {
+        String shortLink;
+        do {
+            shortLink = prefix + generateRandomString();
+        } while (repository.existsByShortLink(shortLink));
+        return shortLink;
+    }
     private String generateRandomString() {
         SecureRandom random = new SecureRandom();
         StringBuilder sb = new StringBuilder(8);
@@ -38,38 +62,6 @@ public class LinkService {
             sb.append(randomChar);
         }
         return sb.toString();
-    }
-    private String generateUniqueShortLink() {
-        String shortLink;
-        do {
-            shortLink = PREFIX + generateRandomString();
-        } while (repository.existsByShortLink(shortLink));
-        return shortLink;
-    }
-//@Repository
-//public interface LinkRepository extends JpaRepository<Link, Long> {
-//    boolean existsByShortLink(String shortLink);
-//}
-
-    ////////////////////////////CHECK
-    public CreateLinkResponse create(String username, CreateLinkRequest request) {
-        Optional<CreateLinkResponse.Error> validationError = validateCreateFields(request);
-
-        if (validationError.isPresent()) {
-            return CreateLinkResponse.failed(validationError.get());
-        }
-
-        User user = userService.findByUsername(username);
-
-        String shortLink = generateRandomString();
-
-        Link createdLink = repository.save(Link.builder()
-                .user(user)
-                .shortLink(shortLink)
-                .originalLink(request.getOriginalLink())
-                .build());
-
-        return CreateLinkResponse.success(createdLink.getId());
     }
 
     public GetUserLinksResponse getUserLinks(String username) {
@@ -99,8 +91,7 @@ public class LinkService {
             return UpdateLinkResponse.failed(validationError.get());
         }
 
-        link.setShortLink(request.getShortLink());
-        link.setOriginalLink(request.getOriginalLink());
+        link.setOriginalLink(request.getOriginalLink()); // Обновляем только originalLink
 
         repository.save(link);
 
@@ -127,10 +118,6 @@ public class LinkService {
     }
 
     private Optional<CreateLinkResponse.Error> validateCreateFields(CreateLinkRequest request) {
-        if (Objects.isNull(request.getShortLink()) || request.getShortLink().isEmpty()) {
-            return Optional.of(CreateLinkResponse.Error.invalidShortLink);
-        }
-
         if (Objects.isNull(request.getOriginalLink()) || request.getOriginalLink().isEmpty()) {
             return Optional.of(CreateLinkResponse.Error.invalidOriginalLink);
         }
@@ -138,14 +125,9 @@ public class LinkService {
     }
 
     private Optional<UpdateLinkResponse.Error> validateUpdateFields(UpdateLinkRequest request) {
-        if (Objects.isNull(request.getShortLink()) || request.getShortLink().isEmpty()) {
-            return Optional.of(UpdateLinkResponse.Error.invalidShortLinkLength);
-        }
-
         if (Objects.isNull(request.getOriginalLink()) || request.getOriginalLink().isEmpty()) {
             return Optional.of(UpdateLinkResponse.Error.invalidOriginalLinkLength);
         }
-
         return Optional.empty();
     }
 
