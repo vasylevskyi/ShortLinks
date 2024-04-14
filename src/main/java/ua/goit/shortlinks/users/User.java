@@ -1,6 +1,6 @@
 package ua.goit.shortlinks.users;
 
-//import ua.goit.shortlinks.linkes.Link;
+import ua.goit.shortlinks.links.Link;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,6 +24,6 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
-//    @OneToMany(mappedBy = "user")
-//    List<Link> links;
+    @OneToMany(mappedBy = "user")
+    List<Link> links;
 }

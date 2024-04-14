@@ -1,24 +1,24 @@
-package ua.goit.shortlinks.notes.dto.delete;
+package ua.goit.shortlinks.links.dto.delete;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Builder
 @Data
-public class DeleteNoteResponse {
+public class DeleteLinkResponse {
     private Error error;
 
     public enum Error {
         ok,
         insufficientPrivileges,
-        invalidNoteId
-    }
+        invalidLinkId
+    }//////////////ПРОВЕРИТЬ
 
-    public static DeleteNoteResponse success() {
+    public static DeleteLinkResponse success() {
         return builder().error(Error.ok).build();
     }
 
-    public static DeleteNoteResponse failed(Error error) {
+    public static DeleteLinkResponse failed(Error error) {
         return builder().error(error).build();
     }
 }
