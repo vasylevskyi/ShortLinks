@@ -28,12 +28,12 @@ public class LinkController {
     }
 
     @PatchMapping
-    public UpdateLinkResponse update(Principal principal, @RequestBody UpdateLinkRequest request) {
-        return linkService.update(principal.getName(), request);
+    public UpdateLinkResponse update(Principal principal, @PathVariable String shortLink, @RequestBody UpdateLinkRequest request) {//АПДЕЙТ
+        return linkService.update(principal.getName(),shortLink, request);
     }
 
-    @DeleteMapping
-    public DeleteLinkResponse delete(Principal principal, @RequestParam(name = "id") long id) {
-        return linkService.delete(principal.getName(), id);
+    @DeleteMapping//АПДЕйТ
+    public DeleteLinkResponse delete(Principal principal, @PathVariable String shortLink) {
+        return linkService.delete(principal.getName(), shortLink);
     }
 }
