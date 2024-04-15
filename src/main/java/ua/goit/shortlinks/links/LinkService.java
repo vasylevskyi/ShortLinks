@@ -58,8 +58,8 @@ public class LinkService {
 
         Link createdLink = repository.save(Link.builder()
                 .user(user)
-                .originalLink(request.getOriginalLink())
                 .shortLink(shortLink)
+                .originalLink(request.getOriginalLink())
                 .build());
 
         return CreateLinkResponse.success(createdLink.getId());
@@ -172,6 +172,8 @@ public class LinkService {
 //        if (Objects.isNull(request.getShortLink()) || request.getShortLink().isEmpty()) {
 //            return Optional.of(CreateLinkResponse.Error.invalidShortLink);
 //        }
+
+        System.out.println("request.getOriginalLink() = " + request.getOriginalLink());
 
         if (Objects.isNull(request.getOriginalLink()) || request.getOriginalLink().isEmpty()) {
             return Optional.of(CreateLinkResponse.Error.invalidOriginalLink);
