@@ -21,6 +21,7 @@ public class CreateLinkResponse  {
     }
 
     public static CreateLinkResponse failed(Error error) {
+//        return builder().error(error).createdLinkId(-1L).build();
         return builder().error(error).createdLinkId(-1L).build();
     }
 }
