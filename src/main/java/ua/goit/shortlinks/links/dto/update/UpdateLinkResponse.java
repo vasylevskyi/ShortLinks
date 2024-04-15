@@ -16,7 +16,6 @@ public class UpdateLinkResponse {
         insufficientPrivileges,
         invalidLinkId,
         invalidShortLinkLength,
-        linkNotFound,
         invalidOriginalLinkLength
     }//////////////ПРОВЕРИТЬ
 

@@ -11,9 +11,8 @@ public class DeleteLinkResponse {
     public enum Error {
         ok,
         insufficientPrivileges,
-        invalidLinkId,
-        linkNotFound // Новая константа для обозначения того, что ссылка не найдена
-    }
+        invalidLinkId
+    }//////////////ПРОВЕРИТЬ
 
     public static DeleteLinkResponse success() {
         return builder().error(Error.ok).build();
