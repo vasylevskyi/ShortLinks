@@ -33,15 +33,19 @@ public class Link {
     @Column(name = "original_link", nullable = false)
     private String originalLink;
 
+    @Builder.Default
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @Builder.Default
     @Column(name = "valid_to", nullable = false)
     private LocalDateTime validTo = LocalDateTime.now().plusDays(20);
 
+    @Builder.Default
     @Column(name = "counter", nullable = false)
     private int counter = 0;
     ////////////////////////////////////
+    @Builder.Default
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;
 
