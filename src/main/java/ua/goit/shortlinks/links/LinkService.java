@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -65,8 +66,10 @@ public class LinkService {
 
         Link createdLink = repository.save(Link.builder()
                 .user(user)
-                .shortLink(shortLink)
                 .originalLink(request.getOriginalLink())
+                .shortLink(shortLink)
+                //.createdAt(LocalDateTime.now())
+                //.validTo(LocalDateTime.now().plusDays(20))
                 .build());
 
         return CreateLinkResponse.success(createdLink.getId());
@@ -127,9 +130,9 @@ public class LinkService {
     }
 
     private Optional<CreateLinkResponse.Error> validateCreateFields(CreateLinkRequest request) {
-        if (Objects.isNull(request.getShortLink()) || request.getShortLink().isEmpty()) {
+/*        if (Objects.isNull(request.getShortLink()) || request.getShortLink().isEmpty()) {
             return Optional.of(CreateLinkResponse.Error.invalidShortLink);
-        }
+        }*/
 
         if (Objects.isNull(request.getOriginalLink()) || request.getOriginalLink().isEmpty()) {
             return Optional.of(CreateLinkResponse.Error.invalidOriginalLink);
