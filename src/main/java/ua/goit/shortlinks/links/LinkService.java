@@ -25,7 +25,7 @@ public class LinkService {
     private final UserService userService;
     private final LinkRepository repository;
 
-////////////////////////////////CHECK
+    ////////////////////////////////CHECK
     private static final String ALLOWED_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final String PREFIX = "http://localhost:8080/";
 
@@ -151,5 +151,13 @@ public class LinkService {
 
     private boolean isNotUserLink(String username, Link link) {
         return !link.getUser().getUserId().equals(username);
+    }
+
+    public Link findByShortLink(String shortLink) {
+        return repository.findByShortLink(shortLink);
+    }
+
+    public void save(Link link) {
+        repository.save(link);
     }
 }

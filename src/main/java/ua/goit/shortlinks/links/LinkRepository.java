@@ -12,4 +12,5 @@ public interface LinkRepository extends JpaRepository<Link, Long> {
     @Query(nativeQuery = true, value = "SELECT * FROM links l WHERE l.user_id = :userId") ////CHECK!!!
     List<Link> getUserLinks(@Param("userId") String userId);
     boolean existsByShortLink(String shortLink); ////CHECK
+    Link findByShortLink(String shortLink);
 }
