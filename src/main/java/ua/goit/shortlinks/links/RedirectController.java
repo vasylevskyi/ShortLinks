@@ -11,7 +11,7 @@ import java.net.URI;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/r")
+@RequestMapping("/")
 public class RedirectController {
 
     private final LinkService linkService;
@@ -22,6 +22,7 @@ public class RedirectController {
 
     @GetMapping("/{shortLink}")
     public ResponseEntity<Void> redirect(@PathVariable String shortLink) {
+        System.out.println("shortLink = " + shortLink); // TO REMOVE LATER
         Link link = linkService.findByShortLink(shortLink);
 
         if (link == null) {
@@ -33,6 +34,7 @@ public class RedirectController {
         } else {
             link.setCounter(link.getCounter() + 1);
             linkService.save(link);
+            System.out.println("link.getOriginalLink() = " + link.getOriginalLink()); //TO REMOVE LATER
             return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
                     .location(URI.create(link.getOriginalLink()))
                     .build();
