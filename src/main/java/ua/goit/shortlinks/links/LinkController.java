@@ -1,5 +1,6 @@
 package ua.goit.shortlinks.links;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ua.goit.shortlinks.links.dto.create.CreateLinkRequest;
@@ -13,6 +14,7 @@ import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "LinkController",description = "LinkController")
 @RequestMapping("/links")
 public class LinkController {
     private final LinkService linkService;

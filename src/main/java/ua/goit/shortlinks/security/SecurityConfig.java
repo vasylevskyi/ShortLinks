@@ -2,6 +2,7 @@ package ua.goit.shortlinks.security;
 
 import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -35,6 +36,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement()
@@ -45,7 +47,7 @@ public class SecurityConfig {
                 .headers(headers -> {
                             headers
                                     .frameOptions().sameOrigin();
-                        } // Enable frameOptions for H2 console
+                        }
                 );;
         return http.build();
     }
