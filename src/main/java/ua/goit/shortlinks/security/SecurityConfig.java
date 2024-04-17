@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
+                        //.requestMatchers("/{shortLink}").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement()
