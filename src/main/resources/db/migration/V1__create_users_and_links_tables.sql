@@ -18,4 +18,4 @@ CREATE TABLE IF NOT EXISTS links (
 INSERT INTO users (user_id, password_hash) VALUES ('john.doe@mail.com', '$2a$12$abMl2.dUx57LDUqhbAh4aeAcsz/iNoX1jebmfSa40AJeC5pbR545i');
 
 INSERT INTO links (user_id, short_link, original_link) VALUES
-    ('john.doe@mail.com', 'http://localhost:8080/ABCD12354', 'https://www.md5hashgenerator.com/');
+    ('john.doe@mail.com', 'ABCD1234', 'https://www.md5hashgenerator.com/');

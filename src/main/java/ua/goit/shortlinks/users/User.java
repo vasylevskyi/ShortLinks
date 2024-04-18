@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+/*public class User {
     @Id
     @Column(name = "id")
     private String Id;
@@ -29,9 +29,8 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     List<Link> links;
-}
-/*
-public class User
+}*/
+public class User{
     @Id
     @Column(name = "user_id")
     private String userId;
@@ -42,4 +41,3 @@ public class User
     @OneToMany(mappedBy = "user")
     List<Link> links;
 }
-*/

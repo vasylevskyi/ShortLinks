@@ -28,11 +28,12 @@ public class LinkController {
     }
 
     @PatchMapping// 18 04 Надо попробовать сделать @PatchMapping("/{shortLink}")
-    public UpdateLinkResponse update(Principal principal, @PathVariable String shortLink, @RequestBody UpdateLinkRequest request) {//АПДЕЙТ
-        return linkService.update(principal.getName(),shortLink, request);
+    public UpdateLinkResponse update(Principal principal, @RequestBody UpdateLinkRequest request) {//АПДЕЙТ
+        return linkService.update(principal.getName(), request);
     }
 
-    @DeleteMapping// 18 04 Надо попробовать сделать @DeleteMapping("/{shortLink}")
+//    @DeleteMapping// 18 04 Надо попробовать сделать
+    @DeleteMapping("/{shortLink}")
     public DeleteLinkResponse delete(Principal principal, @PathVariable String shortLink) {
         return linkService.delete(principal.getName(), shortLink);
     }

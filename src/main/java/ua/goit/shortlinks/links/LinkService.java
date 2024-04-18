@@ -52,7 +52,6 @@ public class LinkService {
         if (validationError.isPresent()) {
             return CreateLinkResponse.failed(validationError.get());
         }
-
         User user = userService.findByUsername(username);
 
         String shortLink = generateUniqueShortLink();
@@ -111,8 +110,8 @@ public class LinkService {
 //
 //        return GetUserLinksResponse.success(userLinks);
 //    }
-    public UpdateLinkResponse update(String username, String shortLink, UpdateLinkRequest request) {//АПДЕЙТ //Вместо лонг айди сделать по короткой ссылке
-        Optional<Link> optionalLink = repository.findByShortLink(shortLink);
+    public UpdateLinkResponse update(String username, UpdateLinkRequest request) {//АПДЕЙТ //Вместо лонг айди сделать по короткой ссылке
+        Optional<Link> optionalLink = repository.findByShortLink(request.getShortLink());
 
         if (optionalLink.isEmpty()) {
             return UpdateLinkResponse.failed(UpdateLinkResponse.Error.linkNotFound);
@@ -169,6 +168,7 @@ public class LinkService {
 //    }
     public DeleteLinkResponse delete(String username, String shortLink) {//АПДЕЙТ //Вместо лонг айди сделать по короткой ссылке. //
         // Он не должен удалять а должеен ставить isDeletes - terue. Сейчас он удаляет но не должен этого делать
+        System.out.println("?????????????????????????????????"+shortLink);
         Optional<Link> optionalLink = repository.findByShortLink(shortLink);
 
         if (optionalLink.isEmpty()) {
