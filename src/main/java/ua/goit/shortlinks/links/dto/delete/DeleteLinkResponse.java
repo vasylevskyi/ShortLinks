@@ -11,7 +11,6 @@ public class DeleteLinkResponse {
     public enum Error {
         ok,
         insufficientPrivileges,
-//        invalidLinkId, //18 04 причина, не используеться
         linkNotFound
     }
 

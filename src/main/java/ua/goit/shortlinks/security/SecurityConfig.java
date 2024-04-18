@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/{shortLink}").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement()
@@ -45,7 +46,7 @@ public class SecurityConfig {
                 .headers(headers -> {
                             headers
                                     .frameOptions().sameOrigin();
-                        } // Enable frameOptions for H2 console
+                        }
                 );;
         return http.build();
     }

@@ -15,7 +15,6 @@ public class UpdateLinkResponse {
         insufficientPrivileges,
 //        invalidLinkId, 18 04 причина, не используеться
         invalidShortLinkLength,
-        linkNotFound,
         invalidOriginalLinkLength
     }
 
