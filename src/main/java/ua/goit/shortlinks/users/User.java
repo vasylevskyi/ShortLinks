@@ -18,6 +18,9 @@ import java.util.List;
 @AllArgsConstructor
 public class User {
     @Id
+    @Column(name = "id")
+    private String Id;
+
     @Column(name = "user_id")
     private String userId;
 
@@ -27,3 +30,16 @@ public class User {
     @OneToMany(mappedBy = "user")
     List<Link> links;
 }
+/*
+public class User
+    @Id
+    @Column(name = "user_id")
+    private String userId;
+
+    @Column(name = "password_hash", nullable = false)
+    private String passwordHash;
+
+    @OneToMany(mappedBy = "user")
+    List<Link> links;
+}
+*/

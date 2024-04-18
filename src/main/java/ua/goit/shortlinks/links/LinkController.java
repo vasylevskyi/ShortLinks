@@ -22,17 +22,17 @@ public class LinkController {
         return linkService.create(principal.getName(), request);
     }
 
-    @GetMapping ("/getUserLinks")
+    @GetMapping ("/getUserLinks") // 18 04 Надо попробовать сделать просто @GetMapping БЕЗ СКОБОК
     public GetUserLinksResponse getUserLinks(Principal principal) {
         return linkService.getUserLinks(principal.getName());
     }
 
-    @PatchMapping
+    @PatchMapping// 18 04 Надо попробовать сделать @PatchMapping("/{shortLink}")
     public UpdateLinkResponse update(Principal principal, @PathVariable String shortLink, @RequestBody UpdateLinkRequest request) {//АПДЕЙТ
         return linkService.update(principal.getName(),shortLink, request);
     }
 
-    @DeleteMapping//АПДЕйТ
+    @DeleteMapping// 18 04 Надо попробовать сделать @DeleteMapping("/{shortLink}")
     public DeleteLinkResponse delete(Principal principal, @PathVariable String shortLink) {
         return linkService.delete(principal.getName(), shortLink);
     }

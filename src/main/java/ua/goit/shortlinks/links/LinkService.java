@@ -37,6 +37,7 @@ public class LinkService {
         }
         return sb.toString();
     }
+
     private String generateUniqueShortLink() {
         String shortLink;
         do {
@@ -54,7 +55,7 @@ public class LinkService {
 
         User user = userService.findByUsername(username);
 
-        String shortLink = generateRandomString();
+        String shortLink = generateUniqueShortLink();
 
         Link createdLink = repository.save(Link.builder()
                 .user(user)
@@ -62,9 +63,46 @@ public class LinkService {
                 .shortLink(shortLink)
                 .build());
 
-        return CreateLinkResponse.success(createdLink.getId());
+        return CreateLinkResponse.success(createdLink.getShortLink());
     }
-    public GetUserLinksResponse getUserLinks(String userId) {//АПДЕЙТ
+//    private String generateRandomString() {
+//        SecureRandom random = new SecureRandom();
+//        StringBuilder sb = new StringBuilder(8);
+//        for (int i = 0; i < 8; i++) {
+//            int randomIndex = random.nextInt(ALLOWED_CHARACTERS.length());
+//            char randomChar = ALLOWED_CHARACTERS.charAt(randomIndex);
+//            sb.append(randomChar);
+//        }
+//        return sb.toString();
+//    }
+//    private String generateUniqueShortLink() {
+//        String shortLink;
+//        do {
+//            shortLink = PREFIX + generateRandomString();
+//        } while (repository.existsByShortLink(shortLink));
+//        return shortLink;
+//    }
+//
+//    public CreateLinkResponse create(String username, CreateLinkRequest request) {
+//        Optional<CreateLinkResponse.Error> validationError = validateCreateFields(request);
+//
+//        if (validationError.isPresent()) {
+//            return CreateLinkResponse.failed(validationError.get());
+//        }
+//
+//        User user = userService.findByUsername(username);
+//
+//        String shortLink = generateRandomString();
+//
+//        Link createdLink = repository.save(Link.builder()
+//                .user(user)
+//                .originalLink(request.getOriginalLink())
+//                .shortLink(shortLink)
+//                .build());
+//
+//        return CreateLinkResponse.success(createdLink.getId());
+//    } comented 18 04 2024
+    public GetUserLinksResponse getUserLinks(String userId) {//АПДЕЙТ //Сделать через юзер айди
         List<Link> userLinks = repository.getUserLinksByUserId(userId);
         return GetUserLinksResponse.success(userLinks);
     }
@@ -73,7 +111,7 @@ public class LinkService {
 //
 //        return GetUserLinksResponse.success(userLinks);
 //    }
-    public UpdateLinkResponse update(String username, String shortLink, UpdateLinkRequest request) {//АПДЕЙТ
+    public UpdateLinkResponse update(String username, String shortLink, UpdateLinkRequest request) {//АПДЕЙТ //Вместо лонг айди сделать по короткой ссылке
         Optional<Link> optionalLink = repository.findByShortLink(shortLink);
 
         if (optionalLink.isEmpty()) {
@@ -129,7 +167,8 @@ public class LinkService {
 //
 //        return UpdateLinkResponse.success(link);
 //    }
-    public DeleteLinkResponse delete(String username, String shortLink) {//АПДЕЙТ
+    public DeleteLinkResponse delete(String username, String shortLink) {//АПДЕЙТ //Вместо лонг айди сделать по короткой ссылке. //
+        // Он не должен удалять а должеен ставить isDeletes - terue. Сейчас он удаляет но не должен этого делать
         Optional<Link> optionalLink = repository.findByShortLink(shortLink);
 
         if (optionalLink.isEmpty()) {
@@ -180,6 +219,7 @@ public class LinkService {
     }
 
     private Optional<UpdateLinkResponse.Error> validateUpdateFields(UpdateLinkRequest request) {
+        //??
         if (Objects.isNull(request.getShortLink()) || request.getShortLink().isEmpty()) {
             return Optional.of(UpdateLinkResponse.Error.invalidShortLinkLength);
         }
@@ -195,4 +235,3 @@ public class LinkService {
         return !link.getUser().getUserId().equals(username);
     }
 }
-//
