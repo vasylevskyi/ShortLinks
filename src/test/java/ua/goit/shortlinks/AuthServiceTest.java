@@ -22,19 +22,14 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthServiceTest {
-
     @Mock
     private UserService userService;
-
     @Mock
     private PasswordEncoder passwordEncoder;
-
     @Mock
     private JwtUtil jwtUtil;
-
     @InjectMocks
     private AuthService authService;
-
     private final String email = "test@example.com";
     private final String password = "Password123";
     private final String token = "fake-jwt-token";
@@ -51,7 +46,7 @@ public class AuthServiceTest {
         request.setEmail(email);
         request.setPassword(password);
 
-        when(userService.findByUsername(email)).thenReturn(null); // No user found with the given email
+        when(userService.findByUsername(email)).thenReturn(null);
 
         RegistrationResponse response = authService.register(request);
 
@@ -59,7 +54,7 @@ public class AuthServiceTest {
         assertEquals(RegistrationResponse.Error.ok, response.getError(), "Expected successful registration");
         assertNull(response.getMessage(), "No error message should be present for successful registration");
 
-        verify(userService, times(1)).saveUser(any(User.class)); // User should be saved once
+        verify(userService, times(1)).saveUser(any(User.class));
     }
 
     @Test
@@ -68,7 +63,7 @@ public class AuthServiceTest {
         request.setEmail(email);
         request.setPassword(password);
 
-        when(userService.findByUsername(email)).thenReturn(new User()); // User already exists
+        when(userService.findByUsername(email)).thenReturn(new User());
 
         RegistrationResponse response = authService.register(request);
 
@@ -76,13 +71,13 @@ public class AuthServiceTest {
         assertEquals(RegistrationResponse.Error.userAlreadyExists, response.getError(), "Expected 'user already exists' error");
         assertEquals("User already exists", response.getMessage(), "Correct error message expected");
 
-        verify(userService, times(0)).saveUser(any(User.class)); // No user should be saved
+        verify(userService, times(0)).saveUser(any(User.class));
     }
 
     @Test
     public void testRegisterInvalidEmail() {
         RegistrationRequest request = new RegistrationRequest();
-        request.setEmail("invalid-email"); // Некорректный email
+        request.setEmail("invalid-email");
         request.setPassword("Password123");
 
         RegistrationResponse response = authService.register(request);
@@ -95,13 +90,13 @@ public class AuthServiceTest {
     public void testRegisterInvalidPassword() {
         RegistrationRequest request = new RegistrationRequest();
         request.setEmail("test@example.com");
-        request.setPassword("short"); // Недостаточная длина пароля
+        request.setPassword("short");
 
         RegistrationResponse response = authService.register(request);
 
-        assertNotNull(response, "Ответ не должен быть пустым");
-        assertEquals(RegistrationResponse.Error.invalidPassword, response.getError(), "Ожидался error invalidPassword");
-        assertEquals("The password must contain a minimum of eight characters, including numbers, uppercase and lowercase letters.", response.getMessage(), "Сообщение об ошибке пароля");
+        assertNotNull(response, "Response should not be empty");
+        assertEquals(RegistrationResponse.Error.invalidPassword, response.getError(), "Expected error invalidPassword");
+        assertEquals("The password must contain a minimum of eight characters, including numbers, uppercase and lowercase letters.", response.getMessage(), "Password error message");
     }
 
     @Test
@@ -113,8 +108,8 @@ public class AuthServiceTest {
         User user = new User();
         user.setPasswordHash("hashed-password");
 
-        when(userService.findByUsername(email)).thenReturn(user); // User exists
-        when(passwordEncoder.matches(password, user.getPasswordHash())).thenReturn(true); // Correct password
+        when(userService.findByUsername(email)).thenReturn(user);
+        when(passwordEncoder.matches(password, user.getPasswordHash())).thenReturn(true);
 
         LoginResponse response = authService.login(request);
 
@@ -122,7 +117,7 @@ public class AuthServiceTest {
         assertEquals(LoginResponse.Error.ok, response.getError(), "Expected successful login");
         assertEquals(token, response.getAuthToken(), "Expected correct JWT token");
 
-        verify(userService, times(1)).findByUsername(email); // User should be retrieved once
+        verify(userService, times(1)).findByUsername(email);
     }
 
     @Test
@@ -131,14 +126,14 @@ public class AuthServiceTest {
         request.setEmail(email);
         request.setPassword(password);
 
-        when(userService.findByUsername(email)).thenReturn(null); // No user found
+        when(userService.findByUsername(email)).thenReturn(null);
 
         LoginResponse response = authService.login(request);
 
         assertNotNull(response, "Response should not be null");
         assertEquals(LoginResponse.Error.invalidEmail, response.getError(), "Expected 'invalid email' error");
 
-        verify(userService, times(1)).findByUsername(email); // User should be retrieved once
+        verify(userService, times(1)).findByUsername(email);
     }
 
     @Test
@@ -150,22 +145,21 @@ public class AuthServiceTest {
         User user = new User();
         user.setPasswordHash("hashed-password");
 
-        when(userService.findByUsername(email)).thenReturn(user); // User exists
-        when(passwordEncoder.matches(password, user.getPasswordHash())).thenReturn(false); // Incorrect password
+        when(userService.findByUsername(email)).thenReturn(user);
+        when(passwordEncoder.matches(password, user.getPasswordHash())).thenReturn(false);
 
         LoginResponse response = authService.login(request);
 
         assertNotNull(response, "Response should not be null");
         assertEquals(LoginResponse.Error.wrongPassword, response.getError(), "Expected 'wrong password' error");
 
-        verify(userService, times(1)).findByUsername(email); // User should be retrieved once
+        verify(userService, times(1)).findByUsername(email);
     }
 
     @Test
     public void testLoginEmptyEmailOrPassword() {
-        // Test empty email
         LoginRequest request1 = new LoginRequest();
-        request1.setEmail(""); // Empty email
+        request1.setEmail("");
         request1.setPassword(password);
 
         LoginResponse response1 = authService.login(request1);
@@ -173,10 +167,9 @@ public class AuthServiceTest {
         assertNotNull(response1, "Response should not be null");
         assertEquals(LoginResponse.Error.invalidEmail, response1.getError(), "Expected 'invalid email' error");
 
-        // Test empty password
-        LoginRequest request2 = new LoginRequest();
+         LoginRequest request2 = new LoginRequest();
         request2.setEmail(email);
-        request2.setPassword(""); // Empty password
+        request2.setPassword("");
 
         LoginResponse response2 = authService.login(request2);
 
