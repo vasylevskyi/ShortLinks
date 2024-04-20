@@ -44,7 +44,7 @@ public class Link {
     @Builder.Default
     @Column(name = "counter", nullable = false)
     private int counter = 0;
-    ////////////////////////////////////
+
     @Builder.Default
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;
