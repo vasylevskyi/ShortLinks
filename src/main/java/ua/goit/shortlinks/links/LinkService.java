@@ -128,7 +128,7 @@ public class LinkService {
 
     private Optional<CreateLinkResponse.Error> validateCreateFields(CreateLinkRequest request) {
         if (Objects.isNull(request.getShortLink()) || request.getShortLink().isEmpty()) {
-            return Optional.of(CreateLinkResponse.Error.invalidShortLink);
+            return Optional.of(CreateLinkResponse.Error.invalidlLink);
         }
 
         if (Objects.isNull(request.getOriginalLink()) || request.getOriginalLink().isEmpty()) {
