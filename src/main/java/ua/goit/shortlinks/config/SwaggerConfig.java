@@ -14,11 +14,18 @@ public class SwaggerConfig {
                 .build();
     }
     @Bean
-    public GroupedOpenApi customOpenApi() {
+    public GroupedOpenApi LinkOpenApi() {
         return GroupedOpenApi.builder()
                 .group("LinkController")
                 .pathsToMatch("/links/**")
                 .pathsToExclude("/links/search/**")
+                .build();
+    }
+    @Bean
+    public GroupedOpenApi RedirectOpenApi() {
+        return GroupedOpenApi.builder()
+                .group("RedirectController")
+                .pathsToMatch("/{shortLink}")
                 .build();
     }
 

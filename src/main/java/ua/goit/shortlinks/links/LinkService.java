@@ -1,6 +1,5 @@
 package ua.goit.shortlinks.links;
 
-import io.swagger.v3.oas.annotations.tags.Tag;
 import ua.goit.shortlinks.links.dto.create.CreateLinkRequest;
 import ua.goit.shortlinks.links.dto.create.CreateLinkResponse;
 
@@ -21,7 +20,6 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-
 public class LinkService {
 
     private final UserService userService;

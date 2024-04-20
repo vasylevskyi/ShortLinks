@@ -14,7 +14,7 @@ import java.security.Principal;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "LinkController",description = "LinkController")
+@Tag(name = "LinkController")
 @RequestMapping("/links")
 public class LinkController {
     private final LinkService linkService;
