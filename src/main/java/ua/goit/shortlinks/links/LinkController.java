@@ -21,10 +21,10 @@ public class LinkController {
     public CreateLinkResponse create(Principal principal, @RequestBody CreateLinkRequest request) {
         return linkService.create(principal.getName(), request);
     }
-
-    @GetMapping ("/getUserLinks")
+    @GetMapping("/getUserLinks")
     public GetUserLinksResponse getUserLinks(Principal principal) {
-        return linkService.getUserLinks(principal.getName());
+        String username = principal.getName();
+        return linkService.getUserLinks(username);
     }
 
     @PatchMapping

@@ -12,10 +12,13 @@ public class UpdateLinkResponse {
 
     public enum Error {
         ok,
-        insufficientPrivileges,
-//        invalidLinkId, 18 04 причина, не используеться
+        linkAlreadyExist,
+        linkNotFound,
+        NoLinkAvailable,
+        invalidNewLink,
         invalidShortLinkLength,
-        invalidOriginalLinkLength
+        invalidOriginalLinkLength,
+        linkNotExist
     }
 
     public static UpdateLinkResponse success(Link updatedLink) {

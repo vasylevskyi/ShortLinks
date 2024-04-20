@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,7 +25,6 @@ public class LinkService {
     private final UserService userService;
     private final LinkRepository repository;
     private static final String ALLOWED_CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    private static final String PREFIX = "http://localhost:8080/";
 
     private String generateRandomString() {
         SecureRandom random = new SecureRandom();
@@ -42,12 +40,24 @@ public class LinkService {
     private String generateUniqueShortLink() {
         String shortLink;
         do {
-            shortLink = PREFIX + generateRandomString();
+            shortLink = generateRandomString();
         } while (repository.existsByShortLink(shortLink));
         return shortLink;
     }
 
     public CreateLinkResponse create(String username, CreateLinkRequest request) {
+        String[] links = request.getOriginalLink().split(",");
+        if (links.length != 1) {
+            return CreateLinkResponse.failed(CreateLinkResponse.Error.multipleLinksProvided);
+        }
+
+        if (!LinkValidator.isLinkValid(request.getOriginalLink())) {
+            return CreateLinkResponse.failed(CreateLinkResponse.Error.invalidlLink);
+        }
+        if (!isValidLinkFormat(request.getOriginalLink())) {
+            return CreateLinkResponse.failed(CreateLinkResponse.Error.invalidLinkFormat);
+        }
+
         Optional<CreateLinkResponse.Error> validationError = validateCreateFields(request);
 
         if (validationError.isPresent()) {
@@ -56,22 +66,38 @@ public class LinkService {
 
         User user = userService.findByUsername(username);
 
-        String shortLink = generateUniqueShortLink();
+        Optional<Link> existingLink = repository.findByOriginalLinkAndUser(request.getOriginalLink(), user);
+        if (existingLink.isPresent()) {
+            if (existingLink.get().isDeleted()) {
+                String shortLink = generateUniqueShortLink();
+                Link createdLink = repository.save(Link.builder()
+                        .user(user)
+                        .originalLink(request.getOriginalLink())
+                        .shortLink(shortLink)
+                        .build());
+                return CreateLinkResponse.success(createdLink.getShortLink());
+            } else {
+                return CreateLinkResponse.failed(CreateLinkResponse.Error.originalLinkAlreadyExists);
+            }
+        } else {
+            String shortLink = generateUniqueShortLink();
 
-        Link createdLink = repository.save(Link.builder()
-                .user(user)
-                .originalLink(request.getOriginalLink())
-                .shortLink(shortLink)
-                .build());
+            Link createdLink = repository.save(Link.builder()
+                    .user(user)
+                    .originalLink(request.getOriginalLink())
+                    .shortLink(shortLink)
+                    .build());
 
-        return CreateLinkResponse.success(createdLink.getShortLink());
+            return CreateLinkResponse.success(createdLink.getShortLink());
+        }
     }
-    public GetUserLinksResponse getUserLinks(String userId) {
-        List<Link> userLinks = repository.getUserLinksByUserId(userId);
+    public GetUserLinksResponse getUserLinks(String username) {
+        List<Link> userLinks = repository.getUserLinksByUserId(username);
         return GetUserLinksResponse.success(userLinks);
     }
 
     public UpdateLinkResponse update(String username, UpdateLinkRequest request) {
+
         Optional<Link> optionalLink = repository.findByShortLink(request.getShortLink());
 
         if (optionalLink.isEmpty()) {
@@ -83,13 +109,26 @@ public class LinkService {
         boolean isNotUserLink = isNotUserLink(username, link);
 
         if (isNotUserLink) {
-            return UpdateLinkResponse.failed(UpdateLinkResponse.Error.insufficientPrivileges);
+            return UpdateLinkResponse.failed(UpdateLinkResponse.Error.NoLinkAvailable);
+        }
+
+        if (link.isDeleted()) {
+            return UpdateLinkResponse.failed(UpdateLinkResponse.Error.linkNotExist);
+        }
+
+        if (!LinkValidator.isLinkValid(request.getOriginalLink())) {
+            return UpdateLinkResponse.failed(UpdateLinkResponse.Error.invalidNewLink);
         }
 
         Optional<UpdateLinkResponse.Error> validationError = validateUpdateFields(request);
 
         if (validationError.isPresent()) {
             return UpdateLinkResponse.failed(validationError.get());
+        }
+
+        Optional<Link> existingUserLink = repository.findByOriginalLinkAndUser(request.getOriginalLink(), link.getUser());
+        if (existingUserLink.isPresent() && !existingUserLink.get().isDeleted()) {
+            return UpdateLinkResponse.failed(UpdateLinkResponse.Error.linkAlreadyExist);
         }
 
         link.setShortLink(request.getShortLink());
@@ -104,23 +143,26 @@ public class LinkService {
         Optional<Link> optionalLink = repository.findByShortLink(shortLink);
 
         if (optionalLink.isEmpty()) {
-            return DeleteLinkResponse.failed(DeleteLinkResponse.Error.linkNotFound);
+            return DeleteLinkResponse.failed(DeleteLinkResponse.Error.linkDoesNotExist);
         }
 
         Link link = optionalLink.get();
         boolean isNotUserLink = isNotUserLink(username, link);
 
         if (isNotUserLink) {
-            return DeleteLinkResponse.failed(DeleteLinkResponse.Error.insufficientPrivileges);
+            return DeleteLinkResponse.failed(DeleteLinkResponse.Error.linkDoesNotExist);
+        }
+
+        if (link.isDeleted()) {
+            return DeleteLinkResponse.failed(DeleteLinkResponse.Error.linkAlreadyDeleted);
         }
 
         link.setDeleted(true);
         repository.save(link);
 
         return DeleteLinkResponse.success();
-    }
+    }    private Optional<CreateLinkResponse.Error> validateCreateFields(CreateLinkRequest request) {
 
-    private Optional<CreateLinkResponse.Error> validateCreateFields(CreateLinkRequest request) {
 /*        if (Objects.isNull(request.getShortLink()) || request.getShortLink().isEmpty()) {
             return Optional.of(CreateLinkResponse.Error.invalidShortLink);
         }*/
@@ -147,11 +189,16 @@ public class LinkService {
         return !link.getUser().getUserId().equals(username);
     }
 
-    public Link findByShortLink(String shortLink) {
-        return repository.findByShortLink(shortLink);
+    public Link getByShortLink(String shortLink) {
+        return repository.getByShortLink(shortLink);
     }
 
     public void save(Link link) {
         repository.save(link);
+    }
+    private boolean isValidLinkFormat(String link) {
+        // Регулярное выражение для проверки формата ссылки
+        String regex = "^(https?|ftp):\\/\\/[\\w\\d-]+(\\.[\\w\\d-]+)+(\\/\\S*)?$";
+        return link.matches(regex);
     }
 }
