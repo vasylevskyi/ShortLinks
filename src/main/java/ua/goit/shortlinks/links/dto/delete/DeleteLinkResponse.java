@@ -11,8 +11,10 @@ public class DeleteLinkResponse {
     public enum Error {
         ok,
         insufficientPrivileges,
-        invalidLinkId
-    }//////////////ПРОВЕРИТЬ
+        linkNotFound,
+        linkDoesNotExist,
+        linkAlreadyDeleted
+    }
 
     public static DeleteLinkResponse success() {
         return builder().error(Error.ok).build();

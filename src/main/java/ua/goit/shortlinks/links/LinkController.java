@@ -23,19 +23,19 @@ public class LinkController {
     public CreateLinkResponse create(Principal principal, @RequestBody CreateLinkRequest request) {
         return linkService.create(principal.getName(), request);
     }
-
-    @GetMapping ("/getUserLinks")
+    @GetMapping("/getUserLinks")
     public GetUserLinksResponse getUserLinks(Principal principal) {
-        return linkService.getUserLinks(principal.getName());
+        String username = principal.getName();
+        return linkService.getUserLinks(username);
     }
 
     @PatchMapping
-    public UpdateLinkResponse update(Principal principal, @RequestBody UpdateLinkRequest request) {
+    public UpdateLinkResponse update(Principal principal, @RequestBody UpdateLinkRequest request) {//АПДЕЙТ
         return linkService.update(principal.getName(), request);
     }
 
-    @DeleteMapping
-    public DeleteLinkResponse delete(Principal principal, @RequestParam(name = "id") long id) {
-        return linkService.delete(principal.getName(), id);
+    @DeleteMapping("/{shortLink}")
+    public DeleteLinkResponse delete(Principal principal, @PathVariable String shortLink) {
+        return linkService.delete(principal.getName(), shortLink);
     }
 }
