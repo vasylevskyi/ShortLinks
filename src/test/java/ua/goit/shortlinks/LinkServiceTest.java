@@ -20,10 +20,12 @@ import ua.goit.shortlinks.users.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
@@ -104,6 +106,55 @@ public class LinkServiceTest {
         assertFalse(link.isDeleted());
     }
 
+//    @Test
+//    public void testGetUserLinks_Success() {
+//        String username = "john.doe@gmail.com";
+//
+//        Link link = new Link();
+//        link.setShortLink("AbCdEfGh");
+//        link.setOriginalLink("https://www.youtube.com/");
+//
+//        linkRepository.save(link);
+//
+//        List<Link> userLinks = new ArrayList<>();
+//        userLinks.add(link);
+//        linkRepository.saveAll(userLinks);
+//
+//        List<Link> retrievedUserLinks = linkRepository.getUserLinksByUserId(username);
+//
+//        assertEquals(0, retrievedUserLinks.size());
+//    } Не работает если поставить assertEquals(1, retrievedUserLinks.size()); А должно
+//@Test
+//public void testGetUserLinks_Success() {
+//    String username = "john.doe@gmail.com";
+//
+//    User user = new User();
+//    user.setUserId(username);
+//
+//    String shortLink = "AbCdEfGh";
+//    Link userLink = new Link();
+//    userLink.setOriginalLink("https://www.pornsahub.com/");
+//    userLink.setShortLink(shortLink);
+//
+//    when(linkRepository.getUserLinksByUserId(username)).thenReturn(Collections.singletonList(userLink));
+//
+//    GetUserLinksResponse response = linkService.getUserLinks(username);
+//
+//    assertEquals(GetUserLinksResponse.Error.ok, response.getError());
+//    assertEquals(1, response.getUserLinks().size());
+//    assertEquals(userLink, response.getUserLinks().get(0));
+//}
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////
 //    @Test
 //    public void testDeleteLink_Failed_LinkAlreadyDeleted() {
 //        /*String username = "john.doe@gmail.com";
