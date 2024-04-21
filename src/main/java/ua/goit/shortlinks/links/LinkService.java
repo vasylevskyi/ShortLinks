@@ -52,7 +52,7 @@ public class LinkService {
         }
 
         if (!LinkValidator.isLinkValid(request.getOriginalLink())) {
-            return CreateLinkResponse.failed(CreateLinkResponse.Error.invalidlLink);
+            return CreateLinkResponse.failed(CreateLinkResponse.Error.invalidLink);
         }
         if (!isValidLinkFormat(request.getOriginalLink())) {
             return CreateLinkResponse.failed(CreateLinkResponse.Error.invalidLinkFormat);
@@ -197,7 +197,6 @@ public class LinkService {
         repository.save(link);
     }
     private boolean isValidLinkFormat(String link) {
-        // Регулярное выражение для проверки формата ссылки
         String regex = "^(https?|ftp):\\/\\/[\\w\\d-]+(\\.[\\w\\d-]+)+(\\/\\S*)?$";
         return link.matches(regex);
     }

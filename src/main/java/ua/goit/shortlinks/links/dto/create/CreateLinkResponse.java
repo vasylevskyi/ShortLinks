@@ -14,7 +14,7 @@ public class CreateLinkResponse  {
         ok,
         invalidOriginalLink,
         multipleLinksProvided,
-        invalidlLink,
+        invalidLink,
         originalLinkAlreadyExists,
         invalidLinkFormat
     }
