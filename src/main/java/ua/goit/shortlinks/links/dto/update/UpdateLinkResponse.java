@@ -3,7 +3,6 @@ package ua.goit.shortlinks.links.dto.update;
 import ua.goit.shortlinks.links.Link;
 import lombok.Builder;
 import lombok.Data;
-///????????????????????????????????????????????????????????????
 @Builder
 @Data
 public class UpdateLinkResponse {
@@ -13,11 +12,14 @@ public class UpdateLinkResponse {
 
     public enum Error {
         ok,
-        insufficientPrivileges,
-        invalidLinkId,
+        linkAlreadyExist,
+        linkNotFound,
+        NoLinkAvailable,
+        invalidNewLink,
         invalidShortLinkLength,
-        invalidOriginalLinkLength
-    }//////////////ПРОВЕРИТЬ
+        invalidOriginalLinkLength,
+        linkNotExist
+    }
 
     public static UpdateLinkResponse success(Link updatedLink) {
         return UpdateLinkResponse.builder().error(Error.ok).updatedLink(updatedLink).build();
