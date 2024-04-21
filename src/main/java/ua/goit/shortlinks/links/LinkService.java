@@ -52,7 +52,7 @@ public class LinkService {
         }
 
         if (!LinkValidator.isLinkValid(request.getOriginalLink())) {
-            return CreateLinkResponse.failed(CreateLinkResponse.Error.invalidlLink);
+            return CreateLinkResponse.failed(CreateLinkResponse.Error.invalidLink);
         }
         if (!isValidLinkFormat(request.getOriginalLink())) {
             return CreateLinkResponse.failed(CreateLinkResponse.Error.invalidLinkFormat);

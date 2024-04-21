@@ -8,13 +8,14 @@ import lombok.Data;
 public class CreateLinkResponse  {
     private Error error;
     private String shortLink;
+    private String originalLink;
     private long createdLinkId;
 
     public enum Error {
         ok,
         invalidOriginalLink,
         multipleLinksProvided,
-        invalidlLink,
+        invalidLink,
         originalLinkAlreadyExists,
         invalidLinkFormat
     }
@@ -24,6 +25,7 @@ public class CreateLinkResponse  {
     }
 
     public static CreateLinkResponse failed(Error error) {
+//        return builder().error(error).createdLinkId(-1L).build();
         return builder().error(error).createdLinkId(-1L).build();
     }
 }

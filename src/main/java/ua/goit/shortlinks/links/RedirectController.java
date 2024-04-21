@@ -1,5 +1,6 @@
 package ua.goit.shortlinks.links;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ public class RedirectController {
     }
 
     @GetMapping("/{shortLink}")
+    @Cacheable(value = "redirects", key = "#shortLink")
     public ResponseEntity<Void> redirect(@PathVariable String shortLink) {
         System.out.println("shortLink = " + shortLink); // TO REMOVE LATER
         Link link = linkService.getByShortLink(shortLink);
