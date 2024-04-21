@@ -1,4 +1,4 @@
-/*package ua.goit.shortlinks;
+package ua.goit.shortlinks;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -43,4 +43,4 @@ public class UserServiceTest {
 
         verify(userRepository, times(1)).save(mockUser);
     }
-}*/
+}
