@@ -1,6 +1,18 @@
-# ShortLinks
-# В application.properties додана можливість користуватись для перевірок косоллю Н2 в ін-меморі варіанті
-# spring.h2.console.enabled=true
-# доступ до консолі http://localhost:8080/h2-console - обмежений налаштуваннями безпеки
-# В базі створено по одному запису для юзерів та лінків
-# Пароль юзера john.doe захешован та готов для використання
+### ShortLinks
+#### Java GraalVM 17.0.9
+
+### Profile dev
+#### В application.properties added Н2 console, http://localhost:8080/h2-console ; user sa
+#### User/pass john.doe created as hash
+#### to run: java -jar ShortLinks-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev
+
+### Profile prod
+#### Need to add Environment
+#### PostgresSQL 16
+#### Environment variables:
+#### DB_USERNAME=postgres
+#### DB_PASSWORD=postgres
+#### to run: java -jar ShortLinks-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+
+
+

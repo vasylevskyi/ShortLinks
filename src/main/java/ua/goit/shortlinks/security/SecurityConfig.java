@@ -33,7 +33,7 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/{shortLink}").permitAll()
                         .anyRequest().authenticated()
@@ -47,7 +47,8 @@ public class SecurityConfig {
                             headers
                                     .frameOptions().sameOrigin();
                         }
-                );;
+                );
+
         return http.build();
     }
 
