@@ -34,7 +34,7 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/{shortLink}").permitAll()
@@ -49,7 +49,8 @@ public class SecurityConfig {
                             headers
                                     .frameOptions().sameOrigin();
                         }
-                );;
+                );
+
         return http.build();
     }
 

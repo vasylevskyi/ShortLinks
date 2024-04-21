@@ -26,7 +26,6 @@ public class RedirectController {
 
     @GetMapping("/{shortLink}")
     public ResponseEntity<Void> redirect(@PathVariable("shortLink") String shortLink) {
-        System.out.println("shortLink = " + shortLink); // TO REMOVE LATER
         Link link = linkService.getByShortLink(shortLink);
 
         if (link == null) {
