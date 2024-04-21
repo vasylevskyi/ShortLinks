@@ -163,9 +163,10 @@ public class LinkService {
         return DeleteLinkResponse.success();
     }    private Optional<CreateLinkResponse.Error> validateCreateFields(CreateLinkRequest request) {
 
-        if (Objects.isNull(request.getShortLink()) || request.getShortLink().isEmpty()) {
+
+/*        if (Objects.isNull(request.getShortLink()) || request.getShortLink().isEmpty()) { ASK GRAVDO
             return Optional.of(CreateLinkResponse.Error.invalidLink);
-        }
+        }*/
 
         if (Objects.isNull(request.getOriginalLink()) || request.getOriginalLink().isEmpty()) {
             return Optional.of(CreateLinkResponse.Error.invalidOriginalLink);
