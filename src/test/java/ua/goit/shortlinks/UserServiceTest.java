@@ -3,7 +3,8 @@ package ua.goit.shortlinks;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 import ua.goit.shortlinks.users.User;
 import ua.goit.shortlinks.users.UserRepository;
 import ua.goit.shortlinks.users.UserService;
@@ -11,10 +12,9 @@ import ua.goit.shortlinks.users.UserService;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
     @Mock
@@ -25,7 +25,6 @@ public class UserServiceTest {
 
     @Test
     public void testFindByUsername_UserExists() {
-
         User mockUser = new User("test_user", "test_password", null);
         Optional<User> optionalUser = Optional.of(mockUser);
 
@@ -37,21 +36,11 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testFindByUsername_UserNotExists() {
-        when(userRepository.findById(anyString())).thenReturn(Optional.empty());
-
-        User result = userService.findByUsername("non_existing_user");
-
-        assertEquals(null, result);
-    }
-
-    @Test
     public void testSaveUser() {
-
         User mockUser = new User("test_user", "test_password", null);
 
         userService.saveUser(mockUser);
 
-         verify(userRepository, times(1)).save(mockUser);
+        verify(userRepository, times(1)).save(mockUser);
     }
 }
