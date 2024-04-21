@@ -6,7 +6,6 @@ import ua.goit.shortlinks.auth.dto.registration.RegistrationRequest;
 import ua.goit.shortlinks.auth.dto.registration.RegistrationResponse;
 import ua.goit.shortlinks.security.JwtUtil;
 import ua.goit.shortlinks.users.User;
-import ua.goit.shortlinks.users.UserRepository;
 import ua.goit.shortlinks.users.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,9 +18,6 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private static final int MAX_USER_ID_LENGTH = 100;
-    private static final int MAX_PASSWORD_LENGTH = 255;
-
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
@@ -30,13 +26,16 @@ public class AuthService {
         User existingUser = userService.findByUsername(request.getEmail());
 
         if (Objects.nonNull(existingUser)) {
-            return RegistrationResponse.failed(RegistrationResponse.Error.userAlreadyExists);
+            return RegistrationResponse.failedAndMessage(
+                    RegistrationResponse.Error.userAlreadyExists,
+                    "User already exists"
+            );
         }
 
-        Optional<RegistrationResponse.Error> validationError = validateRegistrationFields(request);
+        Optional<RegistrationResponse> validationError = validateRegistrationFields(request);
 
         if (validationError.isPresent()) {
-            return RegistrationResponse.failed(validationError.get());
+            return validationError.get();
         }
 
         userService.saveUser(User.builder()
@@ -61,7 +60,7 @@ public class AuthService {
         }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
-            return LoginResponse.failed(LoginResponse.Error.invalidPassword);
+            return LoginResponse.failed(LoginResponse.Error.wrongPassword);
         }
 
         String authToken = jwtUtil.generateToken(request.getEmail());
@@ -69,30 +68,33 @@ public class AuthService {
         return LoginResponse.success(authToken);
     }
 
-    private Optional<RegistrationResponse.Error> validateRegistrationFields(RegistrationRequest request) {
-        if (Objects.isNull(request.getEmail()) || request.getEmail().length() > MAX_USER_ID_LENGTH) {
-            return Optional.of(RegistrationResponse.Error.invalidEmail);
-        }
-        if (Objects.isNull(request.getPassword()) || request.getPassword().length() < 8) {
-            return Optional.of(RegistrationResponse.Error.invalidPassword);
-        }
+    private Optional<RegistrationResponse> validateRegistrationFields(RegistrationRequest request) {
         String passwordPattern = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$";
-        if (!Pattern.matches(passwordPattern, request.getPassword())) {
-            return Optional.of(RegistrationResponse.Error.invalidPassword);
+        String emailPattern = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+
+        if (Objects.isNull(request.getEmail()) || !Pattern.matches(emailPattern, request.getEmail())) {
+            return Optional.of(RegistrationResponse.failedAndMessage(
+                    RegistrationResponse.Error.invalidEmail,
+                    "The email is either incorrectly formatted"
+            ));
+        }
+
+        if (Objects.isNull(request.getPassword()) || !Pattern.matches(passwordPattern, request.getPassword())) {
+            return Optional.of(RegistrationResponse.failedAndMessage(
+                    RegistrationResponse.Error.invalidPassword,
+                    "The password must contain a minimum of eight characters, including numbers, uppercase and lowercase letters."
+            ));
         }
         return Optional.empty();
     }
-
-
     private Optional<LoginResponse.Error> validateLoginFields(LoginRequest request) {
-        if (Objects.isNull(request.getEmail()) || request.getEmail().length() > MAX_USER_ID_LENGTH) {
+        if (Objects.isNull(request.getEmail()) || request.getEmail().isEmpty()) {
             return Optional.of(LoginResponse.Error.invalidEmail);
         }
 
-        if (Objects.isNull(request.getPassword()) || request.getPassword().length() > MAX_PASSWORD_LENGTH) {
-            return Optional.of(LoginResponse.Error.invalidPassword);
+        if (Objects.isNull(request.getPassword()) || request.getPassword().isEmpty()) {
+            return Optional.of(LoginResponse.Error.wrongPassword);
         }
-
         return Optional.empty();
     }
 }

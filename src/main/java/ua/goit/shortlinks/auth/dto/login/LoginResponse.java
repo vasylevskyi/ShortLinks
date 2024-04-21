@@ -13,7 +13,7 @@ public class LoginResponse {
     public enum Error {
         ok,
         invalidEmail,
-        invalidPassword
+        wrongPassword
     }
 
     public static LoginResponse success(String authToken) {
