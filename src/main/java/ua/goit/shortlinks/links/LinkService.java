@@ -163,9 +163,9 @@ public class LinkService {
         return DeleteLinkResponse.success();
     }    private Optional<CreateLinkResponse.Error> validateCreateFields(CreateLinkRequest request) {
 
-/*        if (Objects.isNull(request.getShortLink()) || request.getShortLink().isEmpty()) {
-            return Optional.of(CreateLinkResponse.Error.invalidShortLink);
-        }*/
+        if (Objects.isNull(request.getShortLink()) || request.getShortLink().isEmpty()) {
+            return Optional.of(CreateLinkResponse.Error.invalidLink);
+        }
 
         if (Objects.isNull(request.getOriginalLink()) || request.getOriginalLink().isEmpty()) {
             return Optional.of(CreateLinkResponse.Error.invalidOriginalLink);
@@ -197,7 +197,6 @@ public class LinkService {
         repository.save(link);
     }
     private boolean isValidLinkFormat(String link) {
-        // Регулярное выражение для проверки формата ссылки
         String regex = "^(https?|ftp):\\/\\/[\\w\\d-]+(\\.[\\w\\d-]+)+(\\/\\S*)?$";
         return link.matches(regex);
     }

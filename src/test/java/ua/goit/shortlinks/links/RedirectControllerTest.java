@@ -19,7 +19,7 @@ public class RedirectControllerTest {
         Link link = new Link();
         link.setOriginalLink("http://original.link");
         link.setValidTo(LocalDateTime.now().plusDays(1));
-        when(linkService.findByShortLink("shortLink")).thenReturn(link);
+        when(linkService.getByShortLink("shortLink")).thenReturn(link);
 
         ResponseEntity<Void> response = redirectController.redirect("shortLink");
 
