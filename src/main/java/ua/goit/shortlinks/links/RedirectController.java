@@ -19,11 +19,6 @@ import java.time.LocalDateTime;
 public class RedirectController {
 
     private final LinkService linkService;
-
-//    public RedirectController(LinkService linkService) {
-//        this.linkService = linkService;
-//    }
-
     @GetMapping("/{shortLink}")
     public ResponseEntity<Void> redirect(@PathVariable("shortLink") String shortLink) {
         Link link = linkService.getByShortLink(shortLink);
