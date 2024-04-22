@@ -1,8 +1,11 @@
 package ua.goit.shortlinks.links;
+import org.springframework.stereotype.Component;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.IOException;
 
+@Component
 public class LinkValidator {
 
     public static boolean isLinkValid(String link) {

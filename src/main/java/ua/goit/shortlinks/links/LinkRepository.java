@@ -17,5 +17,6 @@ public interface LinkRepository extends JpaRepository<Link, Long> {
     @Query(nativeQuery = true, value = "SELECT * FROM links l WHERE l.user_id = :userId AND l.is_deleted = false")
     List<Link> getUserLinksByUserId(@Param("userId") String userId);
     Optional<Link> findByOriginalLinkAndUser(String originalLink, User user);
-
+    @Query(nativeQuery = true, value = "SELECT * FROM links l WHERE l.user_id = :userId AND l.is_deleted = false AND l.valid_to > CURRENT_TIMESTAMP")
+    List<Link> getActiveUserLinksByUserId(@Param("userId") String userId);
 }
