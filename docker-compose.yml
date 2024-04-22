@@ -1,0 +1,62 @@
+version: '3.8'
+services:
+  client-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_PORT=8080
+    profiles:
+      - dev
+      - prod
+
+  service-db:
+    image: postgres:14.7-alpine
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "15432:5432"
+    volumes:
+      #  включить миграцию для production профиля
+      - ./infrastructure/db/prod/V1_2__create_users_and_links_tables_prod.sql:/docker-entrypoint-initdb.d/001_init_prod.sql
+      - db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    profiles:
+      - prod
+
+  service-db-dev:
+    image: postgres:14.7-alpine
+    environment:
+      POSTGRES_USER: dev_user
+      POSTGRES_PASSWORD: dev_password
+    ports:
+      - "15433:5432"  # Для dev базы данных используем другой порт
+    volumes:
+      #  включить миграцию для dev профиля
+      - ./infrastructure/db/dev/V1_1__create_users_and_links_tables_dev.sql:/docker-entrypoint-initdb.d/001_init_dev.sql
+      - dev-db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    profiles:
+      - dev
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4:7
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    profiles:
+      - prod
+
+volumes:
+  db-data:
+  dev-db-data:
+  pgadmin-data:
