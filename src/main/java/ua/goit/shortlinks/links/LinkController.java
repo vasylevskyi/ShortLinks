@@ -28,6 +28,11 @@ public class LinkController {
         String username = principal.getName();
         return linkService.getUserLinks(username);
     }
+//    @GetMapping("/getActiveUserLinks")
+//    public GetUserLinksResponse getActiveUserLinks(Principal principal) {
+//        String username = principal.getName();
+//        return linkService.getActiveUserLinks(username);
+//    }
 
     @PatchMapping
     public UpdateLinkResponse update(Principal principal, @RequestBody UpdateLinkRequest request) {//АПДЕЙТ

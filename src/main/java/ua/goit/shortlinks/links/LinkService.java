@@ -46,56 +46,52 @@ public class LinkService {
     }
 
     public CreateLinkResponse create(String username, CreateLinkRequest request) {
-        String[] links = request.getOriginalLink().split(",");
-        if (links.length != 1) {
+        String originalLink = request.getOriginalLink();
+
+        if (originalLink.contains(",")) {
             return CreateLinkResponse.failed(CreateLinkResponse.Error.multipleLinksProvided);
         }
 
-        if (!LinkValidator.isLinkValid(request.getOriginalLink())) {
+        if (!LinkValidator.isLinkValid(originalLink)) {
             return CreateLinkResponse.failed(CreateLinkResponse.Error.invalidLink);
         }
-        if (!isValidLinkFormat(request.getOriginalLink())) {
+
+        if (!isValidLinkFormat(originalLink)) {
             return CreateLinkResponse.failed(CreateLinkResponse.Error.invalidLinkFormat);
         }
 
         Optional<CreateLinkResponse.Error> validationError = validateCreateFields(request);
-
         if (validationError.isPresent()) {
             return CreateLinkResponse.failed(validationError.get());
         }
 
         User user = userService.findByUsername(username);
 
-        Optional<Link> existingLink = repository.findByOriginalLinkAndUser(request.getOriginalLink(), user);
+        Optional<Link> existingLink = repository.findByOriginalLinkAndUser(originalLink, user);
         if (existingLink.isPresent()) {
-            if (existingLink.get().isDeleted()) {
-                String shortLink = generateUniqueShortLink();
-                Link createdLink = repository.save(Link.builder()
-                        .user(user)
-                        .originalLink(request.getOriginalLink())
-                        .shortLink(shortLink)
-                        .build());
-                return CreateLinkResponse.success(createdLink.getShortLink());
-            } else {
+            if (!existingLink.get().isDeleted()) {
                 return CreateLinkResponse.failed(CreateLinkResponse.Error.originalLinkAlreadyExists);
             }
-        } else {
-            String shortLink = generateUniqueShortLink();
-
-            Link createdLink = repository.save(Link.builder()
-                    .user(user)
-                    .originalLink(request.getOriginalLink())
-                    .shortLink(shortLink)
-                    .build());
-
-            return CreateLinkResponse.success(createdLink.getShortLink());
         }
+
+        String shortLink = generateUniqueShortLink();
+
+        Link createdLink = repository.save(Link.builder()
+                .user(user)
+                .originalLink(originalLink)
+                .shortLink(shortLink)
+                .build());
+
+        return CreateLinkResponse.success(createdLink.getShortLink());
     }
     public GetUserLinksResponse getUserLinks(String username) {
         List<Link> userLinks = repository.getUserLinksByUserId(username);
         return GetUserLinksResponse.success(userLinks);
     }
-
+    public GetUserLinksResponse getActiveUserLinks(String username) {
+        List<Link> activeUserLinks = repository.getActiveUserLinksByUserId(username);
+        return GetUserLinksResponse.success(activeUserLinks);
+    }
     public UpdateLinkResponse update(String username, UpdateLinkRequest request) {
 
         Optional<Link> optionalLink = repository.findByShortLink(request.getShortLink());
@@ -166,7 +162,9 @@ public class LinkService {
 
 /*        if (Objects.isNull(request.getShortLink()) || request.getShortLink().isEmpty()) { ASK GRAVDO
             return Optional.of(CreateLinkResponse.Error.invalidLink);
-        }*/
+        }
+        В теории надо удалить
+        */
 
         if (Objects.isNull(request.getOriginalLink()) || request.getOriginalLink().isEmpty()) {
             return Optional.of(CreateLinkResponse.Error.invalidOriginalLink);
