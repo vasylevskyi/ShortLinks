@@ -1,4 +1,3 @@
-/*
 package ua.goit.shortlinks.links;
 
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,10 @@ public class LinkControllerTest {
         CreateLinkRequest request = new CreateLinkRequest();
         request.setOriginalLink("http://original.link");
         when(principal.getName()).thenReturn("username");
-        CreateLinkResponse mockResponse = CreateLinkResponse.success("http://original.link");
+        CreateLinkResponse mockResponse = CreateLinkResponse.success(
+                "http://short.link",
+                "http://original.link"
+        );
         when(linkService.create(anyString(), any(CreateLinkRequest.class))).thenReturn(mockResponse);
 
         CreateLinkResponse response = linkController.create(principal, request);
@@ -29,4 +31,3 @@ public class LinkControllerTest {
         assertEquals("http://original.link", response.getOriginalLink());
     }
 }
-*/

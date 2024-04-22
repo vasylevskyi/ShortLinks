@@ -21,8 +21,8 @@ public class CreateLinkResponse  {
         invalidLinkFormat
     }
 
-    public static CreateLinkResponse success(String shortLink) {
-        return builder().error(Error.ok).shortLink(shortLink).build();
+    public static CreateLinkResponse success(String shortLink, String originalLink) {
+        return builder().error(Error.ok).shortLink(shortLink).originalLink(originalLink).build();
     }
 
     public static CreateLinkResponse failed(Error error) {

@@ -1,5 +1,6 @@
 package ua.goit.shortlinks.links;
 
+import org.springframework.cache.annotation.Cacheable;
 import ua.goit.shortlinks.links.dto.create.CreateLinkRequest;
 import ua.goit.shortlinks.links.dto.create.CreateLinkResponse;
 
@@ -75,7 +76,7 @@ public class LinkService {
                         .originalLink(request.getOriginalLink())
                         .shortLink(shortLink)
                         .build());
-                return CreateLinkResponse.success(createdLink.getShortLink());
+                return CreateLinkResponse.success(createdLink.getShortLink(), request.getOriginalLink());
             } else {
                 return CreateLinkResponse.failed(CreateLinkResponse.Error.originalLinkAlreadyExists);
             }
@@ -88,7 +89,7 @@ public class LinkService {
                     .shortLink(shortLink)
                     .build());
 
-            return CreateLinkResponse.success(createdLink.getShortLink());
+            return CreateLinkResponse.success(createdLink.getShortLink(), request.getOriginalLink());
         }
     }
     public GetUserLinksResponse getUserLinks(String username) {
@@ -190,6 +191,7 @@ public class LinkService {
         return !link.getUser().getUserId().equals(username);
     }
 
+    @Cacheable(value = "redirects", key = "#shortLink")
     public Link getByShortLink(String shortLink) {
         return repository.getByShortLink(shortLink);
     }

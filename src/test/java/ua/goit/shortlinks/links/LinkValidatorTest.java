@@ -1,4 +1,3 @@
-/*
 package ua.goit.shortlinks.links;
 
 import org.junit.jupiter.api.Test;
@@ -9,9 +8,8 @@ public class LinkValidatorTest {
 
     @Test
     public void testIsLinkValid() {
-        boolean isValid = LinkValidator.isLinkValid("http://valid.link");
+        boolean isValid = LinkValidator.isLinkValid("http://www.google.com");
 
         assertTrue(isValid);
     }
 }
-*/
