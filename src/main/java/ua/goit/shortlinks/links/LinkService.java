@@ -92,14 +92,17 @@ public class LinkService {
             return CreateLinkResponse.success(createdLink.getShortLink(), request.getOriginalLink());
         }
     }
+
     public GetUserLinksResponse getUserLinks(String username) {
         List<Link> userLinks = repository.getUserLinksByUserId(username);
         return GetUserLinksResponse.success(userLinks);
     }
+
     public GetUserLinksResponse getActiveUserLinks(String username) {
         List<Link> activeUserLinks = repository.getActiveUserLinksByUserId(username);
         return GetUserLinksResponse.success(activeUserLinks);
     }
+
     public UpdateLinkResponse update(String username, UpdateLinkRequest request) {
 
         Optional<Link> optionalLink = repository.findByShortLink(request.getShortLink());
@@ -165,14 +168,9 @@ public class LinkService {
         repository.save(link);
 
         return DeleteLinkResponse.success();
-    }    private Optional<CreateLinkResponse.Error> validateCreateFields(CreateLinkRequest request) {
+    }
 
-
-/*        if (Objects.isNull(request.getShortLink()) || request.getShortLink().isEmpty()) { ASK GRAVDO
-            return Optional.of(CreateLinkResponse.Error.invalidLink);
-        }
-        В теории надо удалить, да, в теории надо, ток зачем, пусть стоит - маринуеться
-        */
+    private Optional<CreateLinkResponse.Error> validateCreateFields(CreateLinkRequest request) {
 
         if (Objects.isNull(request.getOriginalLink()) || request.getOriginalLink().isEmpty()) {
             return Optional.of(CreateLinkResponse.Error.invalidOriginalLink);
@@ -204,6 +202,7 @@ public class LinkService {
     public void save(Link link) {
         repository.save(link);
     }
+
     private boolean isValidLinkFormat(String link) {
         String regex = "^(https?|ftp):\\/\\/[\\w\\d-]+(\\.[\\w\\d-]+)+(\\/\\S*)?$";
         return link.matches(regex);
