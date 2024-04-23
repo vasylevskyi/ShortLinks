@@ -30,13 +30,14 @@ public class LinkController {
         String username = principal.getName();
         return linkService.getUserLinks(username);
     }
-    @Operation(summary = "Update link", description = "Update link")
+    @Operation(summary = "Get active user's links", description = "Get active user's links")
     @GetMapping("/getActiveUserLinks")
     public GetUserLinksResponse getActiveUserLinks(Principal principal) {
         String username = principal.getName();
         return linkService.getActiveUserLinks(username);
     }
 
+    @Operation(summary = "Update link", description = "Update link")
     @PatchMapping
     public UpdateLinkResponse update(Principal principal, @RequestBody UpdateLinkRequest request) {//АПДЕЙТ
         return linkService.update(principal.getName(), request);
@@ -44,7 +45,7 @@ public class LinkController {
 
     @Operation(summary = "Delete link", description = "Delete link")
     @DeleteMapping("/{shortLink}")
-    public DeleteLinkResponse delete(Principal principal, @PathVariable String shortLink) {
+    public DeleteLinkResponse delete(Principal principal, @PathVariable("shortLink") String shortLink) {
         return linkService.delete(principal.getName(), shortLink);
     }
 }
