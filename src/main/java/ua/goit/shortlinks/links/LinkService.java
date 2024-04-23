@@ -96,7 +96,10 @@ public class LinkService {
         List<Link> userLinks = repository.getUserLinksByUserId(username);
         return GetUserLinksResponse.success(userLinks);
     }
-
+    public GetUserLinksResponse getActiveUserLinks(String username) {
+        List<Link> activeUserLinks = repository.getActiveUserLinksByUserId(username);
+        return GetUserLinksResponse.success(activeUserLinks);
+    }
     public UpdateLinkResponse update(String username, UpdateLinkRequest request) {
 
         Optional<Link> optionalLink = repository.findByShortLink(request.getShortLink());
@@ -167,7 +170,9 @@ public class LinkService {
 
 /*        if (Objects.isNull(request.getShortLink()) || request.getShortLink().isEmpty()) { ASK GRAVDO
             return Optional.of(CreateLinkResponse.Error.invalidLink);
-        }*/
+        }
+        В теории надо удалить, да, в теории надо, ток зачем, пусть стоит - маринуеться
+        */
 
         if (Objects.isNull(request.getOriginalLink()) || request.getOriginalLink().isEmpty()) {
             return Optional.of(CreateLinkResponse.Error.invalidOriginalLink);

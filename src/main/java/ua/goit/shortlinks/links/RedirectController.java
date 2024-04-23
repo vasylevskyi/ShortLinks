@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.net.URI;
 import java.time.LocalDateTime;
@@ -20,11 +21,8 @@ public class RedirectController {
 
     private final LinkService linkService;
 
-//    public RedirectController(LinkService linkService) {
-//        this.linkService = linkService;
-//    }
-
     @GetMapping("/{shortLink}")
+    @Cacheable(value = "redirects", key = "#shortLink")
     public ResponseEntity<Void> redirect(@PathVariable("shortLink") String shortLink) {
         Link link = linkService.getByShortLink(shortLink);
 
