@@ -14,5 +14,5 @@
 #### DB_PASSWORD=postgres
 #### to run: java -jar ShortLinks-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
 
-
-
+### Docker
+#### docker-compose --profile prod up -d
